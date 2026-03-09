@@ -29,20 +29,40 @@ app.post('/create-checkout-session', async (req, res) => {
   payment_method_types: ['card'],
   line_items,
   mode: 'payment',
+
   billing_address_collection: 'required',
-  shipping_address_collection: {},
+
+  shipping_address_collection: {
+    allowed_countries: [
+      'GB','US','IE','CA','AU','NZ','DE','FR','IT','ES','NL','SE','NO','DK',
+      'BE','CH','AT','PT','PL','CZ','HU','RO','BG','HR','GR','FI','LU','MT',
+      'CY','EE','LV','LT','SK','SI'
+    ]
+  },
+
+  shipping_options: [
+    {
+      shipping_rate_data: {
+        type: 'fixed_amount',
+        fixed_amount: {
+          amount: 0,
+          currency: 'gbp'
+        },
+        display_name: 'Standard Shipping',
+        delivery_estimate: {
+          minimum: { unit: 'business_day', value: 3 },
+          maximum: { unit: 'business_day', value: 7 }
+        }
+      }
+    }
+  ],
+
   phone_number_collection: {
     enabled: true
   },
+
   customer_creation: 'always',
+
   success_url: 'https://ggrindlab.com',
   cancel_url: 'https://ggrindlab.com/cart'
-})
-
-  res.json({ url: session.url })
-
-})
-
-app.listen(3000, () => {
-  console.log('Server running on http://localhost:3000')
 })
