@@ -35,16 +35,14 @@ app.post('/create-checkout-session', async (req, res) => {
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
-      line_items,
       mode: 'payment',
-
-      billing_address_collection: 'required',
+      line_items,
 
       shipping_address_collection: {
         allowed_countries: [
-          'GB', 'US', 'IE', 'CA', 'AU', 'NZ', 'DE', 'FR', 'IT', 'ES', 'NL', 'SE', 'NO', 'DK',
-          'BE', 'CH', 'AT', 'PT', 'PL', 'CZ', 'HU', 'RO', 'BG', 'HR', 'GR', 'FI', 'LU', 'MT',
-          'CY', 'EE', 'LV', 'LT', 'SK', 'SI'
+          'GB', 'US', 'IE', 'CA', 'AU', 'NZ', 'DE', 'FR', 'IT', 'ES', 'NL', 'SE',
+          'NO', 'DK', 'BE', 'CH', 'AT', 'PT', 'PL', 'CZ', 'HU', 'RO', 'BG', 'HR',
+          'GR', 'FI', 'LU', 'MT', 'CY', 'EE', 'LV', 'LT', 'SK', 'SI'
         ]
       },
 
@@ -58,8 +56,14 @@ app.post('/create-checkout-session', async (req, res) => {
             },
             display_name: 'Standard Shipping',
             delivery_estimate: {
-              minimum: { unit: 'business_day', value: 3 },
-              maximum: { unit: 'business_day', value: 7 }
+              minimum: {
+                unit: 'business_day',
+                value: 3
+              },
+              maximum: {
+                unit: 'business_day',
+                value: 7
+              }
             }
           }
         }
