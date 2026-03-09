@@ -26,12 +26,20 @@ app.post('/create-checkout-session', async (req, res) => {
   }))
 
   const session = await stripe.checkout.sessions.create({
-    payment_method_types: ['card'],
-    line_items,
-    mode: 'payment',
-    success_url: 'https://ggrindlab.com',
-    cancel_url: 'https://ggrindlab.com/cart'
-  })
+  payment_method_types: ['card'],
+  line_items,
+  mode: 'payment',
+  billing_address_collection: 'required',
+  shipping_address_collection: {
+    allowed_countries: ['GB', 'US', 'IE']
+  },
+  phone_number_collection: {
+    enabled: true
+  },
+  customer_creation: 'always',
+  success_url: 'https://ggrindlab.com',
+  cancel_url: 'https://ggrindlab.com/cart'
+})
 
   res.json({ url: session.url })
 
