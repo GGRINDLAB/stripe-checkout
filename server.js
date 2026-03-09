@@ -30,9 +30,7 @@ app.post('/create-checkout-session', async (req, res) => {
   line_items,
   mode: 'payment',
   billing_address_collection: 'required',
-  shipping_address_collection: {
-    allowed_countries: ['GB', 'US', 'IE']
-  },
+  shipping_address_collection: {},
   phone_number_collection: {
     enabled: true
   },
