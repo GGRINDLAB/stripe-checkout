@@ -108,9 +108,40 @@ app.post('/stripe-webhook', express.raw({ type: 'application/json' }), async (re
 
   try {
     if (event.type === 'checkout.session.completed') {
-      const session = event.data.object;
-      console.log('✅ Payment completed for session:', session.id);
+  const session = event.data.object;
+
+  console.log('✅ Payment completed for session:', session.id);
+
+  const shop = process.env.SHOPIFY_STORE_DOMAIN;
+  const token = process.env.SHOPIFY_ADMIN_ACCESS_TOKEN;
+
+  const orderData = {
+    order: {
+      email: session.customer_details?.email,
+      financial_status: "paid",
+      currency: session.currency,
+      total_price: (session.amount_total / 100).toString(),
+      note: `Stripe payment session ${session.id}`
     }
+  };
+
+  try {
+    const response = await fetch(`https://${shop}/admin/api/2024-01/orders.json`, {
+      method: "POST",
+      headers: {
+        "X-Shopify-Access-Token": token,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(orderData)
+    });
+
+    const data = await response.json();
+
+    console.log("✅ Shopify order created:", data);
+  } catch (err) {
+    console.error("❌ Shopify order creation failed:", err);
+  }
+}
 
     res.json({ received: true });
   } catch (err) {
