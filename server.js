@@ -78,7 +78,8 @@ app.post('/create-checkout-session', async (req, res) => {
 
       customer_creation: 'always',
 
-success_url: 'https://ggrindlab.com/pages/order-success?session_id={CHECKOUT_SESSION_ID}',      cancel_url: 'https://ggrindlab.com/cart'
+success_url: 'https://ggrindlab.com/pages/order-success?session_id={CHECKOUT_SESSION_ID}',
+cancel_url: 'https://ggrindlab.com/cart'
     })
 
     res.json({ url: session.url })
